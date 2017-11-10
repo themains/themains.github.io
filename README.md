@@ -1,2 +1,3 @@
 # themains.github.io
-Website for the organization.
+
+The Mains organization website
