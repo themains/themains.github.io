@@ -7,7 +7,40 @@ title: the mains
 
 	<p>The project is devoted to making it easier to analyzing domain, IP, and URL level data.</a></p>
 
+<a name="domain_classifier"></a>
 <h3>Classify Domains</h3>
+
+Be it understanding media consumption, or segmenting domain referrals, we need to classify the content hosted on domains. 
+
+When faced with the task, often enough, researchers resort to heuristic solutions. For instance, 
+
+<blockquote>
+> We select an initial universe of news outlets (i.e., web domains) via the Open Directory Project (ODP, dmoz.org), a collective of tens of thousands of editors who hand-label websites into a classification hierarchy. This gives 7,923 distinct domains labeled as: news, politics/news, politics/media, and regional/news. Since the vast majority of these news sites receive relatively little traffic, to simplify our analysis we restrict to the one hundred domains that attracted the largest number of unique visitors from our sample of toolbar users. This list of popular news sites includes every major national news source, well-known blogs and many regional dailies, and collectively accounts for over 98% of page views of news sites in the full ODP list (as estimated via our toolbar sample). The complete list of 100 domains is given in the Appendix.
+</blockquote>
+
+From <a href = "https://5harad.com/papers/bubbles.pdf">Filter Bubbles, Echo Chambers, and Online News Consumption</a>
+
+The solution is reasonable but unsatisfactory. For instance, we don't know the number of false positives and negatives. 
+
+There are two simple ways to improve on such methods. One is to build a calibrated keyword classifier. Start with keywords that are good at picking domains with particular content. And then improve and calibrate it using an API. See for instance, <a href = "http://gbytes.gsood.com/2015/07/23/wheres-the-porn-classifying-porn-domains-using-a-calibrated-keyword-classifier/">Where's the Porn? Classifying Porn Domains Using a Calibrated Keyword Classifier</a>. Or one may simply rely on APIs. See for instance, <a href = "http://gbytes.gsood.com/2015/07/23/wheres-the-news-classifying-news-domains/">Where's the news?: Classifying News Domains</a> for a discussion of the method and some remaining issues. 
+
+Relying on APIs is of course not optimal. For one, we don't know the error they make in classifying the content of domains. So to calibrate the error, one may want to handcode a large random sample of domains and report the confusion matrix. Or better yet perhaps, one may want to devise own algorithm to categorize domains. 
+
+The specific cost function we use for classification will vary by application. For instance, if the output of the classification is being used to classify browsing data, one must account for the strong skew in browsing data---a few domains constitute a significant chunk of browsing time and visits. Classification error in algorithms behind APIs and generic ML classifiers do not weight the error by frequency of visits. To address the issues, one may want to weight error by traffic to the site. The traffic to the sites can be estimated over the entirety of the sample, by using <a href = "http://s3.amazonaws.com/alexa-static/top-1m.csv.zip">Alexa top 1 million domains (zip)</a>, which is provided as part of the <a href = "https://github.com/themains/rdomains">rdomains R package</a>, or by using the Alexa API, which can be accessed using the <a href = "https://github.com/cloudyr/aws.alexa">aws.alexa R package</a>. 
+
+<h3>Scripts</h3>
+<ul>
+	<li><a href = "https://github.com/themains/trusted">API Domain Classifier</a> (Python)</li>
+	<li><a href = "https://github.com/themains/keyword_porn">Domain Name Based Classifier (R)</a></li>
+	<li><a href = "https://github.com/themains/rdomains">rdomains: R package providing access to both API and ML</a> (R)</li>
+</ul>
+
+<h3>Data</h3>
+<ul>
+	<li><a href = "http://dx.doi.org/10.7910/DVN/BPS1OK">2004 comScore Browsing Data</a> using <a href = "https://github.com/themains/trusted">API Domain Classifier</a></li>
+	<li><a href = "http://dx.doi.org/10.7910/DVN/OMV93V">Parsed DMOZ Data</a> using <a href = "https://github.com/suriyan/dmoz_csv">DMOZ CSV</a>
+</li>
+
 	<ul>
 		<li><a href = "https://github.com/themains/rdomains">R Package</a></li>
 		<li><a href = "https://github.com/themains/pydomains">Python Package</a></li>
@@ -15,15 +48,18 @@ title: the mains
 		<li><a href = "https://github.com/themains/keyword_porn">Pornographic content using keywords, TLDs etc.</a></li>
 	</ul>
 
+<a name="ip_tools"></a>
 <h3>IP Tools</h3>
 	<ul>
 		<li><a href = "https://github.com/themains/abuse_ip_db">Get Data from Abuse IP DB (R)</a></li>
 		<li><a href = "https://github.com/themains/know_your_ip">Know Your IP</a></li>
 	</ul>
 
+<a name="other_tools"></a>
 <h3>General Tools</h3>
 	<ul>
 		<li><a href = "https://github.com/themains/virustotal">R Client for the Virustotal API</a></li>
+		<li><a href = "https://github.com/cloudyr/aws.alexa">R Client for the aws.alexa API</a></li>
 	</ul>
 
 
